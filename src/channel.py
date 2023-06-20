@@ -16,7 +16,49 @@ class Channel:
 
     def print_info(self) -> None:
         """Выводит в консоль информацию о канале."""
-        print(json.dumps(youtube.channels().list(id=self.channel_id, part='snippet,statistics').execute(), indent=2, ensure_ascii=False))
+        cannel = json.dumps(youtube.channels().list(id=self.channel_id, part='snippet,statistics').execute(), indent=2, ensure_ascii=False)
+        print(cannel)
+
+    @classmethod
+    def get_service(cls, channel_id):
+        '''
+        - id канала
+        - название канала
+        - описание канала
+        - ссылка на канал
+        - количество подписчиков
+        - количество видео
+        - общее количество просмотров
+        '''
+        playlists = (youtube.channels().list(id=channel_id, part='snippet,statistics').execute())
+
+        for playlist in playlists["items"]:
+            id = playlist['id']
+            title = playlist['snippet']['title']
+            description = playlist['snippet']['description']
+            url = playlist['snippet']['thumbnails']['default']['url']
+            subscribers = playlist['statistics']['subscriberCount']
+            videos = playlist['statistics']['videoCount']
+            views = playlist['statistics']['viewCount']
+        return cls(id, title, description, url, subscribers, videos, views)
+
+
+
+
+
+
+
+
+
+moscowpython = Channel('UC-OVMPlMA3-YCIeg4z5z23A')
+moscowpython.get_service('UC-OVMPlMA3-YCIeg4z5z23A')
+
+
+
+
+
+
+
 
 
 
