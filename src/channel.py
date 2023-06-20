@@ -10,7 +10,7 @@ youtube = build('youtube', 'v3', developerKey=api_key)
 
 class Channel:
     """Класс для ютуб-канала"""
-    def __init__(self, channel_id: str) -> None:
+    def __init__(self, channel_id, id = None, title = None, description = None, url = None, subscribers = None, videos = None, views = None) -> None:
         """Экземпляр инициализируется id канала. Дальше все данные будут подтягиваться по API."""
         self.channel_id = channel_id
 
@@ -42,16 +42,21 @@ class Channel:
             views = playlist['statistics']['viewCount']
         return cls(id, title, description, url, subscribers, videos, views)
 
-
-
-
-
-
-
+    def to_json(self, title):
+        with open(f'{title.lower()}', 'a') as f:
+            json.dump([str(self)], f)
+            # else:
+            #     with open(f'{title.lower()}.json') as f:
+            #         data_list = json.load(f)
+            #         data_list.append(self)
+            #     with open(f'{title.lower()}.json', 'w') as f:
+            #         json.dump(data_list, f)
 
 
 moscowpython = Channel('UC-OVMPlMA3-YCIeg4z5z23A')
 moscowpython.get_service('UC-OVMPlMA3-YCIeg4z5z23A')
+moscowpython.to_json('moscowpython.json')
+
 
 
 
