@@ -51,7 +51,6 @@ class Channel:
             views = playlist['statistics']['viewCount']
         return cls(id, title, description, url, subscribers, video_count, views)
 
-
     def to_json(self, title):
         """
         Создание файла JSON
