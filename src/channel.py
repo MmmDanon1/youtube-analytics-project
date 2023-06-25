@@ -11,16 +11,60 @@ youtube = build('youtube', 'v3', developerKey=api_key)
 class Channel:
     """Класс для ютуб-канала"""
 
-    def __init__(self, channel_id = None, id = None, title = None, description = None, url = None, subscribers = None, video_count = None, views = None) -> None:
+    def __init__(self, channel_id: str) -> None:
         """Экземпляр инициализируется id канала. Дальше все данные будут подтягиваться по API."""
         self.channel_id = channel_id
-        self.id = id
-        self.title = title
-        self.description = description
-        self.url = url
-        self.subscribers = subscribers
-        self.video_count = video_count
-        self.views = views
+        playlists = youtube.channels().list(id=channel_id, part='snippet,statistics').execute()
+        for playlist in playlists['items']:
+            self.id = playlist['id']
+            self.title = playlist['snippet']['title']
+            self.description = playlist['snippet']['description']
+            self.url = playlist['snippet']['thumbnails']['default']['url']
+            self.subscribers = int(playlist['statistics']['subscriberCount'])
+            self.video_count = int(playlist['statistics']['videoCount'])
+            self.views = int(playlist['statistics']['viewCount'])
+
+    def __str__(self):
+        """
+        возвращаtn название и ссылку на канал по шаблону `<название_канала> (<ссылка_на_канал>)
+        """
+        return f"Название канала: {self.title}, ссылка на канал: {self.url}"
+
+    def __add__(self, other):
+        """
+        сравниваtn два канала между собой по числу подписчиков (сложение)
+        """
+        return self.views + other.views
+
+    def __sub__(self, other):
+        """
+        сравниваtn два канала между собой по числу подписчиков (вычитание)
+        """
+        return self.views - other.views
+
+    def __lt__(self, other):
+        """
+        сравниваtn два канала между собой по числу подписчиков (меньше ли)
+        """
+        return self.views < other.views
+
+    def __le__(self, other):
+        """
+        сравниваtn два канала между собой по числу подписчиков (меньше или ровно)
+        """
+        return self.views <= other.views
+
+    def __gt__(self, other):
+        """
+        сравниваtn два канала между собой по числу подписчиков (больше ли)
+        """
+        return self.views > other.views
+
+    def __ge__(self, other):
+        """
+        сравниваtn два канала между собой по числу подписчиков (больше или ровно)
+        """
+        return self.views >= other.views
 
     def print_info(self) -> None:
         """Выводит в консоль информацию о канале."""
@@ -40,7 +84,6 @@ class Channel:
         - общее количество просмотров
         '''
         playlists = youtube.channels().list(id=channel_id, part='snippet,statistics').execute()
-
         for playlist in playlists['items']:
             id = playlist['id']
             title = playlist['snippet']['title']
