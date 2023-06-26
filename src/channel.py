@@ -28,43 +28,43 @@ class Channel:
         """
         возвращаtn название и ссылку на канал по шаблону `<название_канала> (<ссылка_на_канал>)
         """
-        return f"Название канала: {self.title}, ссылка на канал: {self.url}"
+        return f"Название канала: {self.subscribers}, ссылка на канал: {self.url}"
 
     def __add__(self, other):
         """
         сравниваtn два канала между собой по числу подписчиков (сложение)
         """
-        return self.views + other.views
+        return self.subscribers + other.subscribers
 
     def __sub__(self, other):
         """
         сравниваtn два канала между собой по числу подписчиков (вычитание)
         """
-        return self.views - other.views
+        return self.subscribers - other.subscribers
 
     def __lt__(self, other):
         """
         сравниваtn два канала между собой по числу подписчиков (меньше ли)
         """
-        return self.views < other.views
+        return self.subscribers < other.subscribers
 
     def __le__(self, other):
         """
         сравниваtn два канала между собой по числу подписчиков (меньше или ровно)
         """
-        return self.views <= other.views
+        return self.subscribers <= other.subscribers
 
     def __gt__(self, other):
         """
         сравниваtn два канала между собой по числу подписчиков (больше ли)
         """
-        return self.views > other.views
+        return self.subscribers > other.subscribers
 
     def __ge__(self, other):
         """
         сравниваtn два канала между собой по числу подписчиков (больше или ровно)
         """
-        return self.views >= other.views
+        return self.subscribers >= other.subscribers
 
     def print_info(self) -> None:
         """Выводит в консоль информацию о канале."""
