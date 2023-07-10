@@ -6,6 +6,7 @@ from googleapiclient.discovery import build
 api_key: str = os.getenv('API_KEY_YT')
 # создать специальный объект для работы с API
 youtube = build('youtube', 'v3', developerKey=api_key)
+
 class Video:
 
     def __init__(self, video_id: str) -> None:
