@@ -32,8 +32,6 @@ class Video:
             self.like_count: int = None
             self.comment_count: int = None
 
-
-
     def __str__(self):
         """
         возвращает название канала
