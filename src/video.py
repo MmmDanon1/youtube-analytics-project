@@ -16,15 +16,23 @@ class Video:
         - количество просмотров
         - количество лайков
         """
-
-        self.video_id = video_id
-        video_response = youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
+        try:
+            self.video_id = video_id
+            video_response = youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
                                                id=video_id
                                                ).execute()
-        self.video_title: str = video_response['items'][0]['snippet']['title']
-        self.view_count: int = video_response['items'][0]['statistics']['viewCount']
-        self.like_count: int = video_response['items'][0]['statistics']['likeCount']
-        self.comment_count: int = video_response['items'][0]['statistics']['commentCount']
+            self.video_title: str = video_response['items'][0]['snippet']['title']
+            self.view_count: int = video_response['items'][0]['statistics']['viewCount']
+            self.like_count: int = video_response['items'][0]['statistics']['likeCount']
+            self.comment_count: int = video_response['items'][0]['statistics']['commentCount']
+        except IndexError:
+            self.video_id = video_id
+            self.video_title: str = None
+            self.view_count: int = None
+            self.like_count: int = None
+            self.comment_count: int = None
+
+
 
     def __str__(self):
         """
