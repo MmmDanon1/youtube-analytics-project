@@ -27,6 +27,30 @@ class PlayList:
         for video in playlist_videos['items']:
             self.title = video['snippet']['title'][0:24]
 
+        # video_ids: list[str] = [video['contentDetails']['videoId'] for video in playlist_videos['items']]
+        # video_response = youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
+        #                                        id=video_ids
+        #                                        ).execute()
+        # for video in video_response['items']:
+        #     # YouTube video duration is in ISO 8601 format
+        #     iso_8601_duration = video['contentDetails']['duration']
+        #     duration = isodate.parse_duration(iso_8601_duration)
+        #     PlayList.time_video.append(str(duration))
+        # self.__total_duration = timedelta()
+        # for i in PlayList.time_video:
+        #     (h, m, s) = i.split(':')
+        #     d = timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+        #     self.__total_duration += d
+
+    @property
+    def total_duration(self):
+        """
+        возвращает объект класса `datetime.timedelta` с суммарной длительность плейлиста
+        """
+        playlist_videos = youtube.playlistItems().list(playlistId=self.playlist_id,
+                                                       part='contentDetails,snippet',
+                                                       maxResults=50,
+                                                       ).execute()
         video_ids: list[str] = [video['contentDetails']['videoId'] for video in playlist_videos['items']]
         video_response = youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
                                                id=video_ids
@@ -36,16 +60,13 @@ class PlayList:
             iso_8601_duration = video['contentDetails']['duration']
             duration = isodate.parse_duration(iso_8601_duration)
             PlayList.time_video.append(str(duration))
-        self.__total_duration = timedelta()
+        all_sum = timedelta()
         for i in PlayList.time_video:
             (h, m, s) = i.split(':')
             d = timedelta(hours=int(h), minutes=int(m), seconds=int(s))
-            self.__total_duration += d
+            all_sum += d
+        return all_sum
 
-    @property
-    def total_duration(self):
-        return self.__total_duration
-    #
     def show_best_video(self):
         """
         возвращает ссылку на самое популярное видео из плейлиста (по количеству лайков)
@@ -63,7 +84,6 @@ class PlayList:
             like_video.append(int(like_count['statistics']['likeCount']))
             max_like = max(like_video)
             index = like_video.index(max_like)
-
         return f"https://youtu.be/{video_ids[index]}"
 
 
